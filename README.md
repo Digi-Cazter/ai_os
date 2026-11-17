@@ -40,6 +40,11 @@ its own firmware handoff and board drivers. NVIDIA documents the
 
 ## Build and run
 
+For Intel or Apple Silicon Macs, use the
+[macOS setup guide](docs/setup-macos.md): Homebrew cross tools, booting,
+telemetry, recording/replay, and GDB. The Makefile selects Homebrew's ELF tool
+names on macOS so the regular lesson commands work.
+
 On an Ubuntu/Debian development machine, these packages provide the GNU tools
 and emulators (install them yourself if they are missing):
 
@@ -92,7 +97,8 @@ selected target. Nothing needs to run on an ARM board to build the ARM kernel.
 The shared `kernel/main.c` is compiled separately for each architecture.
 
 GNU defaults are `x86_64-linux-gnu-gcc`/`ld` and
-`aarch64-linux-gnu-gcc`/`ld`. Although these compilers normally target Linux,
+`aarch64-linux-gnu-gcc`/`ld` on Linux. On macOS the defaults are Homebrew's
+`x86_64-elf-gcc`/`ld` and `aarch64-elf-gcc`/`ld`. Although the Linux compilers normally target Linux,
 our freestanding flags and direct linker invocation use no Linux runtime,
 libc, startup files, or system calls. Dedicated bare-metal toolchains work too:
 

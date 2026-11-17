@@ -1,5 +1,6 @@
 ARCH ?= x86_64
 TOOLCHAIN ?= gcc
+BUILD_HOST_OS := $(shell uname -s)
 BUILD := build/$(ARCH)/$(TOOLCHAIN)
 
 ifeq ($(filter $(ARCH),x86_64 arm64),)
@@ -14,8 +15,14 @@ TARGET_x86_64 := x86_64-none-elf
 TARGET_arm64 := aarch64-none-elf
 TARGET_FLAGS := --target=$(TARGET_$(ARCH))
 else ifeq ($(TOOLCHAIN),gcc)
+ifeq ($(BUILD_HOST_OS),Darwin)
+# Homebrew ELF tools; Apple's native compiler/linker normally target macOS.
+PREFIX_x86_64 := x86_64-elf-
+PREFIX_arm64 := aarch64-elf-
+else
 PREFIX_x86_64 := x86_64-linux-gnu-
 PREFIX_arm64 := aarch64-linux-gnu-
+endif
 KCC ?= $(PREFIX_$(ARCH))gcc
 KLD ?= $(PREFIX_$(ARCH))ld
 else
